@@ -1,0 +1,117 @@
+<h1>Users</h1>
+<button type="button" class="btn btn-primary" (click)="addUserModal()">Add user</button>
+<div>
+	<!--<div *ngFor="let user of users$ | async">
+		{{ user.firstName }} <button (click)="deleteUser(user.id)">x</button>
+	</div>-->
+	<table class="table">
+		<thead class="thead-inverse">
+			<tr>
+				<th>#</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Username</th>
+				<th>Birthdate</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let user of users$ | async">
+				<th scope="row">{{user.id}}</th>
+				<td>{{user.firstName}}</td>
+				<td>{{user.lastName}}</td>
+				<td>{{user.email}}</td>
+				<td>{{user.dob}}</td>				
+				<td>
+					<button (click)="deleteUser(user.id)" type="button" class="btn btn-xs btn-default">
+						<span class="glyphicon glyphicon-trash"></span>&nbsp;
+					</button>
+				</td>
+				<td>
+					<button (click)="editUserModal(user)" type="button" class="btn btn-xs btn-default">
+						<span class="glyphicon glyphicon-edit"></span>&nbsp;
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<modal #usermodal>
+		<form #modalForm="ngForm" (ngSubmit)="onSubmit(user)" [formGroup]="user" class="form-horizontal">
+			<modal-header [show-close]="true">
+				<h4 class="modal-title">Add user</h4>
+			</modal-header>
+			<modal-body>
+				<div class="form-group hidden">
+					<label class="control-label col-md-4">id</label>
+					<div class="col-md-6">
+						<input type="text" class="form-control" formControlName="id">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-md-4">First Name</label>
+					<div class="col-md-6 inputGroupContainer">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input type="text" class="form-control" required formControlName="firstName">
+						</div>
+					</div>
+					<small *ngIf="user.get('firstName').hasError('required') && user.get('firstName').touched" class="help-block error" style="">Please supply your first name</small>
+
+					<div class="error" *ngIf="user.get('firstName').hasError('minlength') && user.get('firstName').touched">Minimum of 2 characters</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-md-4">Last Name</label>
+					<div class="col-md-6 inputGroupContainer">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input type="text" class="form-control" required formControlName="lastName">
+						</div>
+					</div>
+					<div class="error" *ngIf="user.get('lastName').hasError('required') && user.get('lastName').touched">lastname is required</div>
+					<div class="error" *ngIf="user.get('lastName').hasError('minlength') && user.get('lastName').touched">Minimum of 2 characters</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-md-4">Date of birth</label>
+					<div class="col-md-6 inputGroupContainer">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+							<input type="date" class="form-control" required formControlName="dob">
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-md-4">Phone</label>
+					<div class="col-md-6 inputGroupContainer">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+							<input type="text" class="form-control" required formControlName="phone">
+						</div>
+					</div>
+					<div class="error" *ngIf="user.get('phone').hasError('required') && user.get('phone').touched">phone is required</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-md-4">Email</label>
+					<div class="col-md-6 inputGroupContainer">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+							<input name="email" placeholder="E-Mail Address" type="text" class="form-control" required formControlName="email">
+						</div>
+					</div>
+					<div class="error coll-md-offset-4 col-md-6" *ngIf="user.get('email').hasError('required') && user.get('email').touched">email is required</div>
+				</div>
+
+			</modal-body>
+			<modal-footer>
+				<div>
+					<button type="button" class="btn btn-default" data-dismiss="modal" (click)="usermodal.dismiss()">Cancel</button>
+					<button *ngIf="!user.controls.id.value"type="button" class="btn btn-primary" (click)="addUser(user)" [disabled]="user.invalid">Add</button>
+					<button *ngIf="user.controls.id.value" type="button" class="btn btn-primary" (click)="updateUser(user)" [disabled]="user.invalid">Update</button>
+				</div>
+			</modal-footer>
+		</form>
+	</modal>
+</div>
+<pre>Form valid: {{user.valid}}</pre>
+<pre>Id: {{user.controls.id.value}}</pre>
+<!--<pre>this.localState = {{ localState.toString()  }}</pre>-->
